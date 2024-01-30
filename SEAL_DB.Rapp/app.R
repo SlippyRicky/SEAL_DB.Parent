@@ -36,7 +36,7 @@ loginpage <- div(id = "loginpage", style = "width: 500px; max-width: 100%; margi
                      br(),
                      tags$code("Username: Viewer  Password: sightseeing"),
                      br(),
-                     tags$code("Username: Guest (Create account)  Password: 123")
+                     tags$code("Username: Guest (Create account, not available now)  Password: 123")
                      
                    ))
 )
