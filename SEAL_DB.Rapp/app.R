@@ -27,7 +27,7 @@ library(shinyauthr)
 rm(list=ls())
 
 
-setwd("/Users/emericmellet/Desktop/Local /SEAL_DB.Parent/SEAL_DB.Rapp")
+setwd("/Users/emericmellet/Desktop/SEAL_DB.Parent/SEAL_DB.Rapp")
 
 loginpage <- div(id = "loginpage", style = "width: 500px; max-width: 100%; margin: 0 auto; padding: 20px;",
                  wellPanel(
