@@ -10,7 +10,7 @@ library(shinyauthr)
 
 rm(list=ls())
 #setwd(here::here())
-setwd("/Users/emericmellet/Desktop/Local /SEAL_DB.Parent/SEAL_DB.Rapp")
+#setwd("/Users/emericmellet/Desktop/Local /SEAL_DB.Parent/SEAL_DB.Rapp")
 
 loginpage <- div(id = "loginpage", style = "width: 500px; max-width: 100%; margin: 0 auto; padding: 20px;",
                  wellPanel(
@@ -93,6 +93,82 @@ ui <- dashboardPage(header,
 
 
 server <- function(input, output, session) {
+
+  
+  data <- read.csv("bone_data.csv")  # Replace "your_file.csv" with the actual file path
+  
+  # Search functionality
+  observeEvent(input$search_button, {
+    keyword <- input$search_input
+    
+    # Initialize an empty data frame to store search results
+    search_results <- data.frame()
+    
+    # Loop through all columns and search for the keyword
+    for (col in names(data)) {
+      matches <- data[grep(keyword, data[[col]]), ]
+      search_results <- rbind(search_results, matches)
+    }
+    
+    # Remove duplicate rows
+    search_results <- unique(search_results)
+    
+    # Display search results
+    output$search_result <- renderDataTable({
+      datatable(search_results, options = list(autoWidth = TRUE, searching = FALSE))
+    })
+  })
+  
+  # Load the CSV file
+  data <- read.csv("bone_data.csv")  # Replace "your_file.csv" with the actual file path
+  
+  # Display the CSV in the Update Data tab
+  output$update_table <- renderDataTable({
+    datatable(data, editable = TRUE)
+  })
+  
+  # Save the edited data back to the CSV file
+  observeEvent(input$update_table_cell_edit, {
+    info <- input$update_table_cell_edit
+    str(info)  # Print info to understand its structure
+    
+    # Update the data frame with the edited value
+    data[info$row, info$col] <- info$value
+    
+    # Save the updated data frame back to the CSV file
+    write.csv(data, "bone_data.csv", row.names = FALSE)  # Replace "your_file.csv" with the actual file path
+  })
+  
+  
+  
+  data <- read.csv("bone_data.csv")  # Replace "your_file.csv" with actual file path
+  
+  
+  
+  
+  
+  data <- read.csv("bone_data.csv")  # Replace "bone_data.csv" with the actual file path
+  
+  # ... Existing server code ...
+  
+  observeEvent(input$download_search_results, {
+    keyword <- input$search_input
+    
+    # Filter the data based on the search keyword
+    filtered_data <- data[grep(keyword, data), ]
+    
+    # Serve the filtered data for download
+    output$download_search_results <- downloadHandler(
+      filename = function() {
+        paste("search_results_", Sys.Date(), ".csv", sep = "")
+      },
+      content = function(file) {
+        write.csv(filtered_data, file, row.names = FALSE)
+      }
+    )
+  })
+  
+  
   
   
   login = FALSE
@@ -314,22 +390,20 @@ server <- function(input, output, session) {
         tabItem(tabName = "download_tab",
                 fluidPage(
                   titlePanel("Download Data"),
-                  p("This section allows you to download data from the database. Customize this UI as needed."),
                   fluidRow(
                     box(
-                      title = "Select Download Options",
+                      title = "Search",
                       status = "primary",
                       solidHeader = TRUE,
                       width = 12,
                       textInput("search_input", label = "Enter search key",
-                                value = "", placeholder = " your search key "),
-                      selectInput("download_option", "Select Download Option",
-                                  choices = c("Server 1", "Server 2", "Server 3")),
-                      downloadButton("download_data_btn", "Download Data")
+                                value = "", placeholder = "Your search key"),
+                      actionButton("search_button", "Search"),
+                      downloadButton("download_search_results", "Download Search Results")
                     )
                   )
                 )
-        ),
+        ) ,
         
         tabItem(tabName = "update_tab",
                 fluidPage(
@@ -376,4 +450,3 @@ output$selectedImage <- renderImage({
 
 
 shinyApp(ui = ui, server = server)
-
