@@ -1,4 +1,4 @@
-###############################################################################
+############################# DESCRIPTION ######################################
 # # App Description:
 #   This app aims to search a database of bones of various bones with images and 
 #   metadata attached to each entry. 
@@ -13,6 +13,10 @@
 # - App interface for the Home, search, upload, download and help menu items
 ###############################################################################
 
+
+
+#################### App Configuration Settings ################################
+
 Sys.setenv(R_LIBS = "/renv")
 
 # install.packages(c("shiny", "shinydashboard", "DT", "shinyjs", "shinyauthr"))
@@ -26,8 +30,12 @@ library(sodium)
 
 rm(list=ls())
 
-
 setwd("/Users/emericmellet/Desktop/Local/SEAL_DB.Parent/SEAL_DB.Rapp")
+
+###############################################################################
+
+
+############################## DPENDENCIES ####################################
 
 loginpage <- div(id = "loginpage", style = "width: 500px; max-width: 100%; margin: 0 auto; padding: 20px;",
                  wellPanel(
@@ -100,6 +108,13 @@ body <- dashboardBody(shinyjs::useShinyjs(),
                       uiOutput("body")
 )
 
+###############################################################################
+
+
+
+
+################################# UI ##########################################
+
 ui <- dashboardPage(header,
                     sidebar,
                     body,
@@ -111,6 +126,11 @@ ui <- dashboardPage(header,
                     )
 )
 
+###############################################################################
+
+
+
+############################# Server Logic ####################################
 
 server <- function(input, output, session) {
    
@@ -395,6 +415,7 @@ server <- function(input, output, session) {
    })
 }
 
+###############################################################################
 
 shinyApp(ui = ui, server = server)
 
