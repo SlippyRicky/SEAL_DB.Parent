@@ -164,6 +164,7 @@ server <- function(input, output, session) {
          menuItems <- list()
          
          if (user_permission %in% c("none")) {
+            
             menuItems<- list( menuItems,
                               list(menuItem("Create account", tabName = "create_account", icon = icon("user"))
                               )
@@ -187,7 +188,8 @@ server <- function(input, output, session) {
                                list(menuItem("Create Account", tabName = "create_account", icon = icon("user")))
             )
          }
-         sidebarMenu(menuItems)
+         sidebarMenu(menuItems,
+                     selected = "Welcome")
       }
    })
    
@@ -274,24 +276,25 @@ server <- function(input, output, session) {
                     Pinnipedia. The families present are Phocidae (fur seals and
                     sea lions), Odobenidae (walruses) and Phocidae (fur seals)
                     [1], [2]."),
+               
                fluidRow(
-                  
-                  selectInput("image", "Select an Image:",
-                              choices = c("Overview", "Atlas", "Baculum",
-                                          "Brain Endocast", "Femur", 
-                                          "Complete Forelimb", "Humerus",
-                                          "Lower Jaw", "Mandible", "Pelvis",
-                                          "Phalanges", "Radius", "Rib",
-                                          "Scapula", "Skull", 
-                                          "Tibia and Fibula", "Ulna",
-                                          "Cervical Vertebrae", 
-                                          "Lumbar Vertebrae",
-                                          "Thoracical Vertebrae"),
-                              selected = "Overview"
+                  box(
+                     width = 12,
+                     selectInput("image", "Select an Image:",
+                                 choices = c("Overview", "Atlas", "Baculum",
+                                             "Brain Endocast", "Femur", 
+                                             "Complete Forelimb", "Humerus",
+                                             "Lower Jaw", "Mandible", "Pelvis",
+                                             "Phalanges", "Radius", "Rib",
+                                             "Scapula", "Skull", 
+                                             "Tibia and Fibula", "Ulna",
+                                             "Cervical Vertebrae", 
+                                             "Lumbar Vertebrae",
+                                             "Thoracical Vertebrae"),
+                                 selected = "Overview",
+                                 imageOutput("selectedImage")
+                     )
                   )
-               ),
-               fluidRow(
-                  imageOutput("selectedImage")
                )
             ),
             
@@ -385,4 +388,3 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui = ui, server = server)
-
