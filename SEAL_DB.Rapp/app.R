@@ -1,4 +1,21 @@
-# install.packages(c("shiny", "shinydashboard", "DT", "sodium", "RPostgreSQL", "DBI", "shinyjs", "shinyauthr", "here"))
+###############################################################################
+# # App Description:
+#   This app aims to search a database of bones of various bones with images and 
+#   metadata attached to each entry. 
+#   The initial data was provided by Rotterdam University and compiled by the
+#   members of this project.
+# # Members:  Clara Baumans, Emeric Mellet, Lael Licht, Noah Labuschagne,
+#            Xavier Miserez, XiangRu Huang.
+#
+# # MISC:
+#
+# ## To Be Built (TBB):
+# - App interface for the Home, search, upload, download and help menu items
+###############################################################################
+
+
+# install.packages(c("shiny", "shinydashboard", "DT", "sodium", "RPostgreSQL",
+#                    "DBI", "shinyjs", "shinyauthr", "here"))
 
 library(shiny)
 library(shinydashboard)
