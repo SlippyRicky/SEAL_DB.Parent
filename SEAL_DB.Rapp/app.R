@@ -193,6 +193,15 @@ server <- function(input, output, session) {
       }
    })
    
+   output$selectedImage <- renderImage({
+      img_dir <- "www/"
+      
+      img_path <- file.path(img_dir, paste0(input$image, ".png"))
+      
+      list(src = img_path, 
+           alt = "Selected Image",
+           width = "100%")
+   }, deleteFile = FALSE)
    
    output$body <- renderUI( {
       if (USER$login == TRUE) {
@@ -291,9 +300,9 @@ server <- function(input, output, session) {
                                              "Cervical Vertebrae", 
                                              "Lumbar Vertebrae",
                                              "Thoracical Vertebrae"),
-                                 selected = "Overview",
-                                 imageOutput("selectedImage")
-                     )
+                                 selected = "Overview"
+                     ),
+                     imageOutput("selectedImage")
                   )
                )
             ),
@@ -388,3 +397,4 @@ server <- function(input, output, session) {
 
 
 shinyApp(ui = ui, server = server)
+
