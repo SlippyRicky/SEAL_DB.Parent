@@ -13,21 +13,21 @@
 # - App interface for the Home, search, upload, download and help menu items
 ###############################################################################
 
+Sys.setenv(R_LIBS = "/renv")
 
-# install.packages(c("shiny", "shinydashboard", "DT", "sodium", "RPostgreSQL",
-#                    "DBI", "shinyjs", "shinyauthr", "here"))
+# install.packages(c("shiny", "shinydashboard", "DT", "shinyjs", "shinyauthr"))
 
 library(shiny)
 library(shinydashboard)
 library(DT)
 library(shinyjs)
-library(sodium)
 library(shinyauthr)
+library(sodium)
 
 rm(list=ls())
 
 
-setwd("/Users/emericmellet/Desktop/SEAL_DB.Parent/SEAL_DB.Rapp")
+setwd("/Users/emericmellet/Desktop/Local/SEAL_DB.Parent/SEAL_DB.Rapp")
 
 loginpage <- div(id = "loginpage", style = "width: 500px; max-width: 100%; margin: 0 auto; padding: 20px;",
                  wellPanel(
@@ -195,165 +195,185 @@ server <- function(input, output, session) {
    output$body <- renderUI( {
       if (USER$login == TRUE) {
          tabItems(
-            tabItem(tabName = "welcome_tab",
-                    titlePanel("Welcome to S.E.A.L."),
-                    fluidPage(
-                       p("Welcome to the S.E.A.L. Database – a scientific gateway
+            tabItem(
+               tabName = "welcome_tab",
+               titlePanel("Welcome to S.E.A.L."),
+               p("Welcome to the S.E.A.L. Database – a scientific gateway
                     to explore and manage comprehensive information about seal
                     anatomy. The steps listed below outline the initial steps
                     of setting up your own database so that it may provide an
                     understanding of seals and their anatomical nuances.",
-                         
-                         p("1) The first step is to start building all the tables
-                    required for managing the database. Use the SQL query ",
-                           code("all_tables.sql"), ". The query consists of five tables:"),
-                         
-                         br(),
-                         "a. Data_tags -- These tables are still incomplete",
-                         br(),
-                         "b. Data_reference",
-                         br(),
-                         "c. Data_uncertainty",
-                         br(),
-                         "d. User_data",
-                         br(),
-                         "e. User_documentation",
-                         br(),
-                         "f. Now import the file ",
-                         code("data_tags.csv"), " into the ", code("data_tags"),
-                         " table, and ",
-                         code("link_path"), " into the ", code("data_reference"),
-                         " table in the ", code("link_path"), " column",
-                         br(),
-                         "g. Important note: use the query ", code("remove_rows.sql"),
-                         " to delete the rows [125, 126, 127]"
-                       ),
-                       
-                       p("2) After having installed the tables and alterations have
-                    been made, now is the time to fill picture_number in",
-                         code("data_tags") ,",", code("data_reference"), ", and",
-                         code("data_uncertainty"), ". Using the queries and functions."
-                       ),
-                       
-                       "a. First, fill the ", code("picture_number"), " column in ",
-                       code("data_tags"), " using the ", code("picture_number_column_generator.sql"),
-                       " query. This will use the function ",
-                       code("generate_unique_random_number().sql"),
-                       br(),
-                       "b. Then use the queries to transfer the columns from ",
-                       code("data_tags"), " to ", code("data_reference"),
-                       " and ", code("data_uncertainty"),
-                       br(),
-                       "   i. To transfer from ",
-                       code("data_tags"), " to ", code("data_reference"), ": ",
-                       code("picture_number_from_data_tags_to_data_reference.sql"),
-                       br(),
-                       "   ii. To transfer from ",
-                       code("data_tags"), " to ", code("data_uncertainty"), ": ",
-                       code("picture_number_from_data_tags_to_data_uncertainty.sql"),
-                       br(),
-                       "c. Use the query ",
-                       code("insert_scrape_name.sql")," to fill in the column ",
-                       code("scrape_name")," in ", code("data_tags"),
-                       br(),
-                       "d. Use the query ", code("store_image_as_binary_file.sql"),
-                       " to fill in the ", code("stored_image"), " column in ", 
-                       code("data_reference"),
-                       
-                       p("3) After having altered the tables and each one contains the
-                  necessary information about the seals, it is now time to focus
+                 br(),
+                 "1) The first step is to start building all the tables
+                           required for managing the database. Use the SQL query ",
+                 code("all_tables.sql"), 
+                 ". The query consists of five tables:",
+                 br(),
+                 "a. Data_tags -- These tables are still incomplete",
+                 br(),
+                 "b. Data_reference",
+                 br(),
+                 "c. Data_uncertainty",
+                 br(),
+                 "d. User_data",
+                 br(),
+                 "e. User_documentation",
+                 br(),
+                 "f. Now import the file ",
+                 code("data_tags.csv"), " into the ", code("data_tags"),
+                 " table, and ",
+                 code("link_path"), " into the ", code("data_reference"),
+                 " table in the ", code("link_path"), " column",
+                 br(),
+                 "g. Important note: use the query ",
+                 code("remove_rows.sql"),
+                 " to delete the rows [125, 126, 127]"
+               ),
+               
+               p("2) After having installed the tables and alterations
+                       have been made, now is the time to fill picture_number in",
+                 code("data_tags") ,",", code("data_reference"), ", and",
+                 code("data_uncertainty"), ". Using the queries and functions.",
+                 br(),
+                 "a. First, fill the ", code("picture_number"), " column in ",
+                 code("data_tags"), " using the ",
+                 code("picture_number_column_generator.sql"),
+                 " query. This will use the function ",
+                 code("generate_unique_random_number().sql"),
+                 br(),
+                 "b. Then use the queries to transfer the columns from ",
+                 code("data_tags"), " to ", code("data_reference"),
+                 " and ", code("data_uncertainty"),
+                 br(),
+                 "   i. To transfer from ",
+                 code("data_tags"), " to ", code("data_reference"), ": ",
+                 code("picture_number_from_data_tags_to_data_reference.sql"),
+                 br(),
+                 "   ii. To transfer from ",
+                 code("data_tags"), " to ", code("data_uncertainty"), ": ",
+                 code("picture_number_from_data_tags_to_data_uncertainty.sql"),
+                 br(),
+                 "c. Use the query ",
+                 code("insert_scrape_name.sql")," to fill in the column ",
+                 code("scrape_name")," in ", code("data_tags"),
+                 br(),
+                 "d. Use the query ", code("store_image_as_binary_file.sql"),
+                 " to fill in the ", code("stored_image"), " column in ", 
+                 code("data_reference")
+               ),
+               
+               p("3) After having altered the tables and each one contains the
+                  necessary information about the seals,", 
+                 "it is now time to focus
                   on the functions that allow for the automated scalability of
                   the database."),
-                       
-                       h3("Image Viewer"),
-                       p("This database currently contains bone images from six 
+               
+               h3("Image Viewer"),
+               p("This database currently contains bone images from six 
                     species distributed across three families within the suborder 
                     Pinnipedia. The families present are Phocidae (fur seals and
                     sea lions), Odobenidae (walruses) and Phocidae (fur seals)
                     [1], [2]."),
-                    ),
-                    
-                    fluidRow(
-                       selectInput("image", "Select an Image:",
-                                   choices = c("Overview", "Atlas", "Baculum", "Brain Endocast", "Femur", 
-                                               "Complete Forelimb", "Humerus", "Lower Jaw", "Mandible", "Pelvis",
-                                               "Phalanges", "Radius", "Rib", "Scapula", "Skull", 
-                                               "Tibia and Fibula", "Ulna", "Cervical Vertebrae", 
-                                               "Lumbar Vertebrae", "Thoracical Vertebrae"),
-                                   selected = "Overview"
-                       ),
-                       imageOutput("selectedImage")
-                    )
+               fluidRow(
+                  
+                  selectInput("image", "Select an Image:",
+                              choices = c("Overview", "Atlas", "Baculum",
+                                          "Brain Endocast", "Femur", 
+                                          "Complete Forelimb", "Humerus",
+                                          "Lower Jaw", "Mandible", "Pelvis",
+                                          "Phalanges", "Radius", "Rib",
+                                          "Scapula", "Skull", 
+                                          "Tibia and Fibula", "Ulna",
+                                          "Cervical Vertebrae", 
+                                          "Lumbar Vertebrae",
+                                          "Thoracical Vertebrae"),
+                              selected = "Overview"
+                  )
+               ),
+               fluidRow(
+                  imageOutput("selectedImage")
+               )
             ),
             
-            tabItem(tabName = "search_tab",
-                    fluidRow(
-                       box(
-                          title = "Search",
-                          status = "primary",
-                          solidHeader = TRUE,
-                          width = 12,
-                          textInput("search_input", label = "Enter search words", value = ""),
-                          actionButton("search_button", "Search")
-                       )
-                    ),
-                    fluidRow(
-                       box(
-                          title = "Results",
-                          width = 12,
-                          DTOutput("search_result"),
-                          textOutput("error")
-                       )
-                    )
+            tabItem(
+               tabName = "search_tab",
+               titlePanel("Search"),
+               fluidRow(
+                  box(
+                     status = "primary",
+                     width = 12,
+                     textInput("search_input", label = "Enter Search Parameters", value = ""),
+                     actionButton("search_button", "Search")
+                  )
+               ),
+               fluidRow(
+                  box(
+                     title = "Results",
+                     width = 12,
+                     DTOutput("search_result"),
+                  )
+               )
             ),
             
-            tabItem(tabName = "download_tab",
-                    fluidPage(
-                       titlePanel("Download Data"),
-                       p("This section allows you to download data from the database. Customize this UI as needed."),
-                       fluidRow(
-                          box(
-                             title = "Select Download Options",
-                             status = "primary",
-                             solidHeader = TRUE,
-                             width = 12,
-                             textInput("search_input", label = "Enter search key",
-                                       value = "", placeholder = " your search key "),
-                             selectInput("download_option", "Select Download Option",
-                                         choices = c("Server 1", "")),
-                             downloadButton("download_data_btn", "Download Data")
-                          )
-                       )
-                    )
+            tabItem(
+               tabName = "download_tab",
+               titlePanel("Download Data"),
+               p("This section allows you to download data from the
+                         database."),
+               fluidRow(
+                  box(
+                     title = "Select Data",
+                     status = "primary",
+                     solidHeader = TRUE,
+                     width = 12,
+                     textInput("search_input", label = "Enter search key",
+                               value = "", placeholder = " your search key "),
+                     selectInput("download_option", "Select Download Option",
+                                 choices = c("Option 1", "")),
+                  )
+               ),
+               fluidRow(
+                  box(
+                     title = "Preview Data",
+                     width = 12, 
+                     downloadButton("download_data_btn", "Download Data")
+                  )
+               )
             ),
             
-            tabItem(tabName = "update_tab",
-                    fluidPage(
-                       titlePanel("Update Data"),
-                       p("This section allows you to update data in the database.
-                    Customize this UI as needed."),
-                       fluidRow(
-                          box(
-                             title = "Update Table",
-                             status = "primary",
-                             solidHeader = TRUE,
-                             width = 12,
-                             DTOutput("update_table")
-                          )
-                       )
-                    )
+            tabItem(
+               tabName = "update_tab",
+               titlePanel("Update Data"),
+               p("This section allows you to choose and update data within the 
+                         database."),
+               fluidRow(
+                  box(
+                     status = "primary",
+                     width = 12,
+                     textInput("search_input", label = "Enter search key",
+                               value = "", placeholder = " your search key "),
+                  )
+               ),
+               fluidRow(
+                  box(
+                     title = "Preview Data",
+                     width = 12,
+                     actionButton("update_selected_data", "Commit Edit")
+                  )
+               )
             ),
             
-            tabItem(tabName = "create_account",
-                    h2("Create Account"),
-                    textInput("new_username", "Username"),
-                    passwordInput("new_password", "Password",
-                                  placeholder = "Beware of the password you use"),
-                    passwordInput("confirm_password", "Confirm Password"),
-                    textInput("additional_comments", "Additional Comments",
-                              placeholder = "Please write name and student ID
+            tabItem(
+               tabName = "create_account",
+               titlePanel("Create Account"),
+               textInput("new_username", "Username"),
+               passwordInput("new_password", "Password",
+                             placeholder = "Beware of the password you use"),
+               passwordInput("confirm_password", "Confirm Password"),
+               textInput("additional_comments", "Additional Comments",
+                         placeholder = "Please write name and student ID
                         if applicable"),
-                    actionButton("create_account_btn", "Create Account")
+               actionButton("create_account_btn", "Create Account")
             )
          )
       }
