@@ -92,7 +92,7 @@ header <- dashboardHeader( title = "S.E.A.L Database",
                               class = "dropdown",
                               tags$a(
                                  icon("github"),
-                                 href = "https://github.com/SlippyRicky/PaleoIchonoDBSearch_R.git",
+                                 href = "https://github.com/SlippyRicky/SEAL_DB.Parent.git",
                                  title = "Find the code on github"
                               )
                            )
